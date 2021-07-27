@@ -10,7 +10,7 @@ const private_token = process.env['token_hashed']
 //public: 59f4d719c050539b5834dc376d87d2d6c90af3a50767041cae9d24a10f42c2fe2471125bb1b9d7e4ec964437ec395a9a506f26ef1e35073d82518de9eb1f916c
 
 app.get('/', (req, res) => {
-	res.redirect('https://demo.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/')
+	res.redirect('https://github.com/pieromqwerty/productized-url-lengthenizer')
 });
 
 app.get('/a', (req, res) => {

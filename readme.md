@@ -15,7 +15,7 @@ To create simplicity, the whole system can be self-hosted, or you can use the ex
 
 An example request might look like this:
 ```curl
-curl -XGET 'https://demo.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/a?url=https%3A%2F%2Ffuckyourusers.com%2F&token=59f4d719c050539b5834dc376d87d2d6c90af3a50767041cae9d24a10f42c2fe2471125bb1b9d7e4ec964437ec395a9a506f26ef1e35073d82518de9eb1f916c'
+curl -XGET 'https://dmo.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/a?url=https%3A%2F%2Ffuckyourusers.com%2F&token=59f4d719c050539b5834dc376d87d2d6c90af3a50767041cae9d24a10f42c2fe2471125bb1b9d7e4ec964437ec395a9a506f26ef1e35073d82518de9eb1f916c'
 ```
 
 If these instructions are unclear, feel free to leave a comment on the repl or open an issue on the Github repository. Have a great day!
