@@ -5,7 +5,6 @@ const ejs = require('ejs');
 const uuid = require("uuid");
 const ogs = require('open-graph-scraper');
 const bent = require('bent')
-//const crypto = require('crypto');
 const log = require('fancy-log');
 const urlLengthener = require("url-lengthener");
 const { Crypto } = require("@peculiar/webcrypto");
@@ -24,6 +23,7 @@ app.use(express.urlencoded({
 	extended: true
 }))
 app.use('/static', express.static('public'))
+var expressWs = require('express-ws')(app);
 
 const users = [] //Put the IDS of users here who are not you
 const repl_author = process.env['REPL_OWNER']
@@ -40,9 +40,13 @@ app.get('/', async (req, res) => {
 			let urls = await db.get(`user_id_${user_id}`);
 			let out_list = {};
 			for (let i in urls) {
-				let value = await db.get(urls[i]);
+				let value = await db.get('resulting_url_' + urls[i]);
 				out_list[urls[i]] = value;
 			}
+
+			console.log(urls)
+			console.log(out_list)
+
 			let view_name = 'dashboard.html'
 			let json = {
 				siteName: siteName,
@@ -122,8 +126,11 @@ app.post('/new', async (req, res) => {
 				}
 			});
 			await db.set("resulting_url_" + id, req.body.url).then(async () => {
+				console.log("resulting saved")
 				db.get(`user_id_${user_id}`).then(user_urls => {
-					user_urls[id] = url;
+					console.log("grabbing db of user")
+					user_urls[id] = id;
+					console.log("setting user backl")
 					db.set(`user_id_${user_id}`, user_urls);
 				});
 			});
@@ -372,45 +379,38 @@ app.get('/:id', async (req, res) => {
 	}*/
 });
 
-app.get('/decrypt/:id', async (req, res) => {
-	//try {
-		let actual_id = req.params.id;
-		let public_key = urlLengthener.hex2str(urlLengthener.a2hex(req.params.encrypted_public));
-		console.log(public_key)
-		let resulting_url = await db.get("resulting_url_" + actual_id);
-		console.log(resulting_url)
+app.ws('/decrypt', async function(ws, req) {
+	ws.on('message', async function(msg) {
+		let msg_decoded = JSON.parse(msg)
+		let actual_id = msg_decoded['id'];
+		let public_key = await urlLengthener.hex2str(urlLengthener.a2hex(msg_decoded['publicKey']));
+		let public_key_parsed = await JSON.parse(public_key);
 
-		const public_key_object = crypto.subtle.importKey(
+		console.log(public_key_parsed)
+		let encoder = new TextEncoder();
+		let resulting_url = await db.get("resulting_url_" + actual_id);
+/*
+		const public_key_object = await crypto.subtle.importKey(
 			"jwk",
-			Buffer.from(JSON.parse(public_key)),
-			"RSA-OAEP",
+			public_key_parsed,
+			{
+			name:"RSA-OAEP",
+			hash: {name: "SHA-256"}
+			},
 			true,
-			['encrypt']
+			["encrypt"]
 		);
 
-		let encrypted_url = crypto.subtle.encrypt("RSA-OAEP", public_key, Buffer.from(resulting_url));
-		
-		let view_name = 'auth_complete.html'
-		let json = {
-			url: encrypted_url,
-			siteName: siteName,
-			siteUrl: siteURL,
-			code: '200',
-			message: ""
-		};
-		log(`Returned ${view_name}`)
-		fs.readFile(`views/${view_name}`, 'utf8', async (err, data) => res.end(ejs.render(data, json)));
-/*	} catch (err) {
-		let view_name = 'error.html'
-		let json = {
-			siteName: siteName,
-			siteUrl: siteURL,
-			code: '400',
-			message: "That URL doesn't exist, sorry!"
-		};
-		log.error("Error! Sent 400")
-		fs.readFile(`views/${view_name}`, 'utf8', async (err, data) => res.end(ejs.render(data, json)));
-	}*/
+		//urlLengthener.hex2a(urlLengthener.str2hex())
+
+		let encrypted_url = await crypto.subtle.encrypt("RSA-OAEP", public_key_object, Buffer.from(resulting_url));
+
+		console.log(urlLengthener.hex2a(urlLengthener.str2hex(encrypted_url.toString())))
+
+		ws.send(urlLengthener.hex2a(urlLengthener.str2hex(encrypted_url.toString())));*/
+		let url_yeeted = urlLengthener.hex2a(urlLengthener.str2hex(resulting_url));
+		ws.send(encoder.encode(url_yeeted));
+	});
 });
 
 app.listen(8008, '0.0.0.0', () => {

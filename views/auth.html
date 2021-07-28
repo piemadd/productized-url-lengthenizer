@@ -7,8 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login | <%= siteName %>
 	</title>
-	<script defer data-domain="replit.sh" src="https://plausible.io/js/plausible.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/url-lengthener@latest/url-lengthener.min.js"></script>
+	<script defer data-domain="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com" src="https://plausible.io/js/plausible.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/url-lengthener@latest/url-lengthener.js"></script>
 	<script src="../static/bundle.js"></script>
 </head>
 
@@ -32,6 +32,20 @@
 		</div>
 	</div>
 	<script>
+
+		function str2ab(str) {
+			var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+			var bufView = new Uint16Array(buf);
+			for (var i=0, strLen=str.length; i < strLen; i++) {
+				bufView[i] = str.charCodeAt(i);
+			}
+			return buf;
+		}
+
+		function ab_to_hex(buffer) {
+			return 
+		}
+
 		async function decrypt() {
 
 			console.log("generating keys!")
@@ -47,15 +61,46 @@
 			["encrypt", "decrypt"]
 			);
 
-			document.cookie = await crypto.subtle.exportKey("jwk", keyPair.privateKey)
-
-			console.log(await crypto.subtle.exportKey("jwk", keyPair.publicKey))
+			const private_key = await keyPair.privateKey
 
 			let result = await hex2a(str2hex(JSON.stringify(await crypto.subtle.exportKey("jwk", keyPair.publicKey))))
 
-			console.log(result)
+			await console.log("result")
 
-			window.location.href = "/decrypt?encrypted_public=<%= id %>/" + result;
+			let site_url = "<%= siteUrl %>".replace("https://", "").replace("http://", "")
+
+			await console.log("site_url")
+
+			const socket = new WebSocket(`wss://${site_url}/decrypt`);
+
+			socket.addEventListener('open', function (event) {
+				socket.send(JSON.stringify({id: "<%= id %>", publicKey: result}));
+			});
+
+			socket.addEventListener('message', async function (event) {
+				console.log(await event.data.arrayBuffer())
+				let decoder = new TextDecoder('utf-8');
+				let url = hex2str(a2hex(decoder.decode(await event.data.arrayBuffer())));
+				/*console.log(event.data)
+				let encrypted_url_raw = hex2str(a2hex(event.data));
+				var encrypted_url = new ArrayBuffer(encrypted_url_raw.length*2); // 2 bytes for each char
+				console.log("encrypted")
+				var bufView = new Uint16Array(encrypted_url);
+				console.log("buf")
+				for (var i=0, strLen=encrypted_url_raw.length; i < strLen; i++) {
+					bufView[i] = encrypted_url_raw.charCodeAt(i);
+					console.log("loop")
+				}
+				let encrypted_url_padded = Array.from(new Uint8Array(encrypted_url)).map(n => ("0" + n.toString(16)).slice(-2))//.join("");
+				console.log(encrypted_url)
+				
+				console.log("loopdone")
+				crypto.subtle.decrypt("RSA-OAEP", private_key, encrypted_url).then((final_url) => {
+					console.log(final_url)
+					console.log("final")
+				});*/
+				window.location.href = url;
+			});
 		}
 	</script>
 </body>

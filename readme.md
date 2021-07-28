@@ -8,8 +8,9 @@ To tackle the aforementioned issues, we can not only encrypt said links digitall
 
 ## Advantages
 
-- Multiple Encrypted Requests
+- Multiple Encrypted Requests*
   - Transferring the multiple key-pairs across multiple requests prevents any machine-side programs or browser extensions from snooping in on the action very easily.
+  > *Due to issues with client-side decryption, we have reduced down to only visual encryption for now, but actual encryption is soon to come.
 - Anti-OCR and Atni-Human-Copying
   - OCR programs are very likely to miss the ever so small accents on the links, and sometimes not even the entire link, leading to it being close to impossible to decrypt the link from a picture.
   - Humans would take an incredible time to manually transcribe the 200+ character URLs, leaving human decryption out of the picture.
@@ -17,6 +18,7 @@ To tackle the aforementioned issues, we can not only encrypt said links digitall
   - The entire program, library included, is less than 10KB and therefore incredibly fast. You won't experience any slowdowns while having a greater piece of mind with your links.
 - Anti-Automated Link Sniffing
   - Even if someone gets ahold of one of the sent links, chances are they'll attempt to use it hours after it was initially used. As the links are single-use only, they will be straight out of luck.
+
 
 ## Get It
 

@@ -12,6 +12,7 @@
     "crypto-random-string": "^4.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "express-ws": "^5.0.2",
     "fancy-log": "^1.3.3",
     "open-graph-scraper": "^4.9.0",
     "url-lengthener": "^1.5.1",
