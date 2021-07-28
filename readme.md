@@ -16,14 +16,14 @@ To tackle the aforementioned issues, we can not only encrypt said links digitall
 - Incredibly Lightweight
   - The entire program, library included, is less than 10KB and therefore incredibly fast. You won't experience any slowdowns while having a greater piece of mind with your links.
 - Anti-Automated Link Sniffing
-  - Even if someone gets ahold of one of the sent links, chances are they'll attempt to use it hours after it was initially used. As the links are single-use only, they will be straight out of luck. Additionally, the use of hCaptcha prevents the automation of the decryption process, unless someone is truly dedicated lol...
+  - Even if someone gets ahold of one of the sent links, chances are they'll attempt to use it hours after it was initially used. As the links are single-use only, they will be straight out of luck.
 
 ## Get It
 
 Currently you can either self host or join the closed beta. If you are legitimately interested in joining, feel free to reach out at getstarted@piemadd.com]. It is currently free, though will have a price of $2/Month for commercial uses in the future.
 
 ## How does it work?
-While the concepts of a [url lengthener](https://ax56.pro) and AES encryption are already widely available, you may be wondering how one can encrypt a link digitally. Well, its very similar to how SSL, what allows your browser connection to be secure, works. When the link is "encrypted", a 256-bit RSA keypair is generated and the public key is sent along to the end user in the form of a link. Meanwhile, the database stores the private key and the resulting link. When the end user clicks on the link, another keypair is generated, but this time the end user's public key is encrypted with the original user's public key. That is then sent to the server, which decrypts the public key with it's private key, and then encrypts the link with the end-user's public key. The encrypted URL is finally sent back to the end user where their private key is finally able to decrypt the URL and visit the resulting site. Confused? Me too.
+While the concepts of a [url lengthener](https://ax56.pro) and RSA encryption are already widely available, you may be wondering how one can encrypt a link digitally. Well, its very similar to how SSL, what allows your browser connection to be secure, works. When the link is "encrypted", a 256-bit RSA keypair is generated and the public key is sent along to the end user in the form of a link. Meanwhile, the database stores the private key and the resulting link. When the end user clicks on the link, another keypair is generated, but this time the end user's public key is encrypted with the original user's public key. That is then sent to the server, which decrypts the public key with it's private key, and then encrypts the link with the end-user's public key. The encrypted URL is finally sent back to the end user where their private key is finally able to decrypt the URL and visit the resulting site. Confused? Me too.
 
 ## Self Host
 
