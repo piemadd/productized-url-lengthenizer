@@ -1,21 +1,57 @@
-# URL Lengthener - Productized
+# Visually Encrypted Links
 
-In the current age of authentication, some of the most important links which secure us pass through our emails every single day. Because of this, there is always the risk that *someone* over your shoulder at a coffee shop, workplace, or really anyone who can take a glance or picture at your computer, even for a few seconds, would be able to see the copy-paste versions of these links and use them to reset your passwords and gain access to your account. Is the likelyhood of this low? Most definitely. Is is a risk which should be avoided at all costs due to is damning consequences? Most certainly. 
+In our current day and age, links are more important than ever in our lives. It is ever so important that we not only protect these from the virtual world, but the physical one as well. 
 
-After the success of [aaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com](https://aaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/) a few months back, I took it upon myself to productize this and bring it to the mainstream, as who knows how many hackers use OCR to gain access to accounts. This is one of the advantages of my URL Lengthener. Due to the fact that almost every character in the URL is the letter `A` in some variation, it becomes incredibly difficult for OCR programs, much less humans, to be able to access one of these URLs before the intended user does. So, how does one use it?
+Ever since the launch of [aaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com](https://aaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/) and it successfully having 120k+ users within the first day, I knew I could, and had to, go bigger.
 
-To create simplicity, the whole system can be self-hosted, or you can use the existing [aaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com API](https://www.npmjs.com/package/url-lengthener#:~:text=url). The simplest way to do so is to fork this repl, though you can always host it on your own. Either way, these are the steps which follow:
+To tackle the aforementioned issues, we can not only encrypt said links digitally, but also visually. The repetetive nature of an AX56 URL combined with the security of AES encryption algorithms, can confuse a OCR program and a human while also making brute forcing close to impossible. With this in mind, we can create some of the safest and most secure links anyone will come to know, all with just a few lines of code. 
 
-1. Run `generate_token.js` to receive a public and private token.
-2. Put the private token in an environment variable called `token_hashed`, though you can just put it straigt into `index.js` under the variable `private_token`, though this is discouraged if you are using something like a public repl.
-3. When it comes to your application, send a `GET` request to the server to the `/a` route with the two URL parameters being `token`, your public token, and `url`, the URL you need lengthened.
-   1. If the token and URL are both correct, the lengthened URL will be returned.
-   2. If the token is incorrect, `INVALID_TOKEN` will be returned.
-   3. If the token is correct, but the passed URL is not, `INVALID_URL` will be returned.
+## Advantages
 
-An example request might look like this:
-```curl
-curl -XGET 'https://dmo.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/a?url=https%3A%2F%2Ffuckyourusers.com%2F&token=59f4d719c050539b5834dc376d87d2d6c90af3a50767041cae9d24a10f42c2fe2471125bb1b9d7e4ec964437ec395a9a506f26ef1e35073d82518de9eb1f916c'
+- Multiple Encrypted Requests
+  - Transferring the multiple key-pairs across multiple requests prevents any machine-side programs or browser extensions from snooping in on the action very easily.
+- Anti-OCR and Atni-Human-Copying
+  - OCR programs are very likely to miss the ever so small accents on the links, and sometimes not even the entire link, leading to it being close to impossible to decrypt the link from a picture.
+  - Humans would take an incredible time to manually transcribe the 200+ character URLs, leaving human decryption out of the picture.
+- Incredibly Lightweight
+  - The entire program, library included, is less than 10KB and therefore incredibly fast. You won't experience any slowdowns while having a greater piece of mind with your links.
+- Anti-Automated Link Sniffing
+  - Even if someone gets ahold of one of the sent links, chances are they'll attempt to use it hours after it was initially used. As the links are single-use only, they will be straight out of luck. Additionally, the use of hCaptcha prevents the automation of the decryption process, unless someone is truly dedicated lol...
+
+## Get It
+
+Currently you can either self host or join the closed beta. If you are legitimately interested in joining, feel free to reach out at getstarted@piemadd.com]. It is currently free, though will have a price of $2/Month for commercial uses in the future.
+
+## How does it work?
+While the concepts of a [url lengthener](https://ax56.pro) and AES encryption are already widely available, you may be wondering how one can encrypt a link digitally. Well, its very similar to how SSL, what allows your browser connection to be secure, works. When the link is "encrypted", a 256-bit RSA keypair is generated and the public key is sent along to the end user in the form of a link. Meanwhile, the database stores the private key and the resulting link. When the end user clicks on the link, another keypair is generated, but this time the end user's public key is encrypted with the original user's public key. That is then sent to the server, which decrypts the public key with it's private key, and then encrypts the link with the end-user's public key. The encrypted URL is finally sent back to the end user where their private key is finally able to decrypt the URL and visit the resulting site. Confused? Me too.
+
+## Self Host
+
+1. Fork the [repl](https://replit.com/@piemadd/productized-url-lengthenizer).
+   1. Do note that this can only currently be run on Replit due to how SSL is handled and the use of Replit DB.
+2. Delete the `views` folder and rename `view-no-analytics` to `views`. The `views` folder's templates are connected to Plausible for some simple analytics of mine and I'm guessing you probably don't want those.
+3. Simply click the run button.
+
+Now, you will be able to log into the resulting site using [Repl Auth](https://docs.replit.com/hosting/authenticating-users-repl-auth) and yourself only. Multi-user support is coming soon.
+
+You can simply paste a link in, copy the result, and send it off to the intended recipient.
+
+## Non-Hosted/Free Uses
+
+### Bookmarklet
+> Encrypts the prompted for link visually and then allows you to copy the result to the clipboard
+
+While you might not initially get the purpose of using this bookmarklet, it can be useful for simply deterring any attention in the physical world from your computer. Simply make a bookmarklet with the following code and get started.
+
+```js
+javascript:var input_url=window.prompt("Enter your URL: ");function str2hex(a){for(var r=[],n=0,e=a.length;n<e;n++){var t=Number(a.charCodeAt(n)).toString(16);r.push(t)}return r.join("")}function hex2a(a){return a.split("").map(a=>{return{0:"a",1:"à",2:"á",3:"â",4:"ã",5:"ä",6:"å",7:"æ",8:"A",9:"À",a:"Á",b:"Â",c:"Ã",d:"Ä",e:"Å",f:"Æ"}[a]}).join("")}try{new URL(input_url)}catch(a){console.error("URL is not valid",a)}let new_url=hex2a(str2hex(input_url));for(;new_url.length<200;)new_url="áaaÂ"+new_url;new_url="https://aaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com/a?"+new_url,window.prompt("Please copy the resulting URL: ",new_url);
 ```
 
-If these instructions are unclear, feel free to leave a comment on the repl or open an issue on the Github repository. Have a great day!
+### Node.js Library
+A library to visually encrypt your urls in Node and Typescript is available [here](https://www.npmjs.com/package/url-lengthener).
+
+### Python Library
+A library to visually encrypt your urls in Python is available [here](https://pypi.org/project/ax56/) (not maintained by me).
+
+## Closing Remarks
+This project still has some time to go before the Release launch, so expect some changes over the next month or two. I am currently looking at a mid-to-late August release into v1.0, and any feedback is greatly appreciated.

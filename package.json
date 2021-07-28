@@ -4,10 +4,18 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@peculiar/webcrypto": "^1.1.7",
+    "@replit/database": "^2.0.1",
     "@shuaninfo/random": "^5.1.1",
+    "bent": "^7.3.12",
+    "browserify": "^17.0.0",
     "crypto-random-string": "^4.0.0",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "url-lengthener": "^1.5.1"
+    "fancy-log": "^1.3.3",
+    "open-graph-scraper": "^4.9.0",
+    "url-lengthener": "^1.5.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {},
   "scripts": {
